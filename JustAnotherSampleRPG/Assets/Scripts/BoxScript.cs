@@ -4,8 +4,7 @@ using System.Collections.Generic;
 
 public class BoxScript : MonoBehaviour
 {
-    public List<GameObject> Buildings;
-
+	private GameObject selectedBuilding;
     private bool inside;
     private bool buildFinished;
     private ResourceScript playerScript;
@@ -22,15 +21,25 @@ public class BoxScript : MonoBehaviour
 	
 	void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && inside == true && buildFinished == false && playerScript.lumber >= 1 && playerScript.stone >= 2)
-        {
-            playerScript.lumber -= 1;
-            playerScript.stone -= 2;
-            Instantiate(Buildings[0], gameObject.transform.position, gameObject.transform.rotation);
-            buildFinished = true;
-        }
+		if (inside)
+		{
+			//Open build menu
 
-        
+
+
+			if (Input.GetKeyDown(KeyCode.Return) && buildFinished == false && playerScript.lumber >= 10 && playerScript.stone >= 20)
+			{
+				playerScript.lumber -= 10;
+				playerScript.stone -= 20;
+				Instantiate(selectedBuilding, gameObject.transform.position, gameObject.transform.rotation);
+				buildFinished = true;
+			}
+
+			if (buildFinished)
+			{
+				//Open craft menu
+			}
+		}
     }
 
     void OnTriggerStay2D(Collider2D coll)

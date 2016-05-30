@@ -7,16 +7,18 @@ public class QuestScript : MonoBehaviour
 {
     public Text levelText;
 	public Text dangerText;
+	public Text survivalText;
 	public Text lootLumberText;
     public Text lootStoneText;
 
     private int level;
 	private int danger;
-    private int lootLumber;
+	private int survival;
+	private int lootLumber;
     private int lootStone;
     private int damage;
 	private int chance;
-	private int chanceMod = 0;
+	private int chanceMod = 15;
 	private int dieRoll;
 
 	private GameObject player;
@@ -42,8 +44,10 @@ public class QuestScript : MonoBehaviour
 		lootLumber = (int)Random.Range(1, ((int)(level * Random.Range(0.7F, 1.1F)) + (danger * Random.Range(0.75F, 1.25F)) + (danger / 2)));
 		lootStone = (int)Random.Range(1, ((int)(level * Random.Range(1.2F, 1.9F)) + (danger * Random.Range(0.8F, 1.0F)) + (danger / 2)));
 
+		//Write out level
 		levelText.text = "Recommended level: " + level.ToString();
 
+		//Write out danger
 		if (danger > 20)
 		{
 			dangerText.text = "Danger level: Medium";
@@ -61,6 +65,10 @@ public class QuestScript : MonoBehaviour
 			dangerText.text = "Danger level: Easy";
 		}
 
+		//Write out chance of success
+		survival = Mathf.Clamp((100 - chanceMod * (level - playerScript.level) - danger), 0, 100);
+		survivalText.text = "Chance of survival: " + survival.ToString() + "%";
+
 		lootLumberText.text = lootLumber.ToString();
 		lootStoneText.text = lootStone.ToString();
 	}
@@ -68,14 +76,13 @@ public class QuestScript : MonoBehaviour
 	public void AcceptQuest()
 	{
 		dieRoll = Random.Range(0, 101);
-		chance = 95;
+		chance = 100;
 		if (level > playerScript.level)
 		{
-			chanceMod = 15;
 			chanceMod = chanceMod * (level - playerScript.level);
 		}
 		chance -= chanceMod;
-		chance -= danger;
+		chance -= (danger + 10);
 		if (chance < 0)
 		{
 			chance = 0;

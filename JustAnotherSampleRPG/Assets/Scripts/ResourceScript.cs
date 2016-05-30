@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 public class ResourceScript : MonoBehaviour
 {
-    public List<string> inventory;
-
     public int level;
     public int health;
     public int lumber;
